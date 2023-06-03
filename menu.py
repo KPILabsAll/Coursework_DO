@@ -1,5 +1,5 @@
 from user_input import user_input
-from user_output import print_results
+from user_output import print_results, print_results_to_file
 from brute_force import brute_force
 from graph_state_search import graph_state_search
 from hull_search import hull_search
@@ -43,11 +43,20 @@ def solve_problem():
     print(data)
 
     if choice == '1':
-        print_results(graph_state_search(data, []).triangles, AlgorithmEnum.graph_state_search)
+        print_results_to_file(
+            print_results(graph_state_search(data, []).triangles, AlgorithmEnum.graph_state_search),
+            AlgorithmEnum.graph_state_search
+        )
     elif choice == '2':
-        print_results(hull_search(data), AlgorithmEnum.hull_search)
+        print_results_to_file(
+            print_results(hull_search(data), AlgorithmEnum.hull_search),
+            AlgorithmEnum.hull_search
+        )
     elif choice == '3':
-        print_results(brute_force(data), AlgorithmEnum.brute_force)
+        print_results_to_file(
+            print_results(brute_force(data), AlgorithmEnum.brute_force),
+            AlgorithmEnum.brute_force
+        )
     else:
         print("Invalid choice!")
 
