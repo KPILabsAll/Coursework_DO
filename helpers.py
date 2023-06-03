@@ -29,8 +29,6 @@ def parse_result(triangle_combinations, algorythm: AlgorithmEnum):
     formatted_result = triangle_combinations
     if algorythm.value == AlgorithmEnum.hull_search.value:
         formatted_result = tuple(tuple(map(tuple, arr.tolist())) for arr in triangle_combinations)
-    elif algorythm.value == AlgorithmEnum.graph_state_search.value:
-        formatted_result = tuple(tuple(map(tuple, arr)) for arr in triangle_combinations)
 
     return formatted_result
 

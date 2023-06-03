@@ -40,11 +40,11 @@ def solve_problem():
     choice = input("Enter your choice (1-3): ")
 
     data = user_input()
-    print(data)
+    print("Points: ", data)
 
     if choice == '1':
         print_results_to_file(
-            print_results(graph_state_search(data, []).triangles, AlgorithmEnum.graph_state_search),
+            print_results(graph_state_search(data).triangles, AlgorithmEnum.graph_state_search),
             AlgorithmEnum.graph_state_search
         )
     elif choice == '2':

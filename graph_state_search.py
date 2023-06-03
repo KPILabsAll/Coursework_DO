@@ -1,5 +1,4 @@
 import itertools
-import numpy as np
 
 
 class SearchResult:
@@ -8,7 +7,12 @@ class SearchResult:
         self.max_total_area = total_area
 
 
-def graph_state_search(points, existing_triangles) -> SearchResult:
+def graph_state_search(points) -> SearchResult:
+    points = sorted(points, key=lambda p: p[0])
+    return graph_state_search_rec(points, [])
+
+
+def graph_state_search_rec(points, existing_triangles) -> SearchResult:
     if len(points) % 3 != 0:
         return ValueError('the number of points must be a multiple of 3')
 
@@ -24,8 +28,8 @@ def graph_state_search(points, existing_triangles) -> SearchResult:
 
     for t in triangles:
         if (can_build_triangle(t, points, existing_triangles)):
-            remaining_points = np.array([p for p in points if tuple(p) not in set([tuple(p1) for p1 in t])])
-            res = graph_state_search(remaining_points, existing_triangles + [t])
+            remaining_points = [p for p in points if tuple(p) not in set([tuple(p1) for p1 in t])]
+            res = graph_state_search_rec(remaining_points, existing_triangles + [t])
             if (res.max_total_area == 0):
                 continue
 

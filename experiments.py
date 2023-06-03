@@ -186,7 +186,7 @@ def solving_problem_time(points):
     # Graph State Search Algorithm
     start_time_graph_state_search = time.time()
 
-    graph_state_search(points, [])
+    graph_state_search(points)
 
     end_time_graph_state_search = time.time()
     elapsed_time_graph_state_search = end_time_graph_state_search - start_time_graph_state_search
@@ -213,7 +213,7 @@ def solving_problem_time(points):
 def solving_problem_shift(points):
     # Graph State Search Algorithm
     graph_state_search_area = calculate_total_combination_area(
-        parse_result(graph_state_search(points, []).triangles, AlgorithmEnum.graph_state_search))
+        parse_result(graph_state_search(points).triangles, AlgorithmEnum.graph_state_search))
 
     # Hull Search Algorithm
     hull_search_area = calculate_total_combination_area(
