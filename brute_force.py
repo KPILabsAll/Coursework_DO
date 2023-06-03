@@ -20,7 +20,6 @@ def brute_force(points):
 
 def generate_point_triples(points):
     triples = []
-    n = len(points)
 
     for triple in combinations(points, 3):
         if can_form_triangle(triple):
@@ -78,6 +77,31 @@ def check_intersection(triangle1, triangle2):
             segment2 = (triangle2[j], triangle2[(j + 1) % 3])
             if segments_intersect(segment1, segment2):
                 return True
+
+    if triangle_contains_triangle(triangle1, triangle2) or triangle_contains_triangle(triangle2, triangle1):
+        return True
+
+    return False
+
+
+def triangle_contains_triangle(triangle1, triangle2):
+    for point in triangle2:
+        if not point_inside_triangle(point, triangle1):
+            return False
+
+    return True
+
+
+def point_inside_triangle(point, triangle):
+    p1, p2, p3 = triangle[0], triangle[1], triangle[2]
+
+    o1 = orientation(p1, p2, point)
+    o2 = orientation(p2, p3, point)
+    o3 = orientation(p3, p1, point)
+
+    if o1 == o2 == o3 != 0:
+        return True
+
     return False
 
 
