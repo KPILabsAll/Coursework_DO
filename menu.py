@@ -44,17 +44,17 @@ def solve_problem():
 
     if choice == '1':
         print_results_to_file(
-            print_results(graph_state_search(data).triangles, AlgorithmEnum.graph_state_search),
+            print_results(graph_state_search(data).triangles),
             AlgorithmEnum.graph_state_search
         )
     elif choice == '2':
         print_results_to_file(
-            print_results(hull_search(data), AlgorithmEnum.hull_search),
+            print_results(hull_search(data)),
             AlgorithmEnum.hull_search
         )
     elif choice == '3':
         print_results_to_file(
-            print_results(brute_force(data), AlgorithmEnum.brute_force),
+            print_results(brute_force(data)),
             AlgorithmEnum.brute_force
         )
     else:

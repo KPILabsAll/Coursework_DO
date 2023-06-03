@@ -21,6 +21,11 @@ def hull_search(points: np.ndarray) -> np.ndarray:
 
 
 # helper functions
+def cross_product(p1, p2):
+    (x1, y1) = (p1[0], p1[1])
+    (x2, y2) = (p2[0], p2[1])
+    return x1 * y2 - x2 * y1
+
 
 def get_convex_hull(points: np.ndarray) -> np.ndarray:
     if len(points) < 3:
@@ -31,7 +36,7 @@ def get_convex_hull(points: np.ndarray) -> np.ndarray:
     def dome(sample, base):
         h, t = base
         dists = np.dot(sample - h, np.dot(((0, -1), (1, 0)), (t - h)))
-        outer = np.repeat(sample, dists > 0, 0)
+        outer = np.repeat(sample, dists > 10 ** (-5), 0)
         edge = lambda a, b: np.concatenate(([a], [b]))
 
         if len(outer):
@@ -69,6 +74,34 @@ def can_build_triangle(a, b, c, points: np.ndarray) -> bool:
     return not any_points_isolated
 
 
+def is_point_between_edges(edge1, edge2, p):
+    edge_points = [tuple(p) for p in edge1 + edge2]
+    if tuple(p) in edge_points: return True
+    base_point = edge1[1]
+    p1, p2 = edge1[0], edge2[1]
+    base_vector = (base_point[0] - p[0], base_point[1] - p[1])
+    vector1 = (p1[0] - p[0], p1[1] - p[1])
+    vector2 = (p2[0] - p[0], p2[1] - p[1])
+    return cross_product(base_vector, vector1) * cross_product(base_vector, vector2) < 0
+
+
+def can_build_inner_triangle(hull_edges, edge_index, vertex_p, points):
+    hull_edge1 = hull_edges[(edge_index - 1) % len(hull_edges)]
+    hull_edge2 = hull_edges[(edge_index + 1) % len(hull_edges)]
+    triangle = [hull_edges[edge_index][0], hull_edges[edge_index][1], vertex_p]
+    points_groups = [[], []]
+    for p in points:
+        if tuple(p) in [tuple(tp) for tp in triangle]: continue
+        if is_inside_convex_polygon(triangle, p): return False, points_groups
+        if is_point_between_edges(hull_edge1, (triangle[0], triangle[2]), p):
+            points_groups[0].append(p)
+        if is_point_between_edges((triangle[2], triangle[1]), hull_edge2, p):
+            points_groups[1].append(p)
+
+    can_build = len(points_groups[0]) % 3 == 0 or len(points_groups[1]) % 3 == 0
+    return can_build, points_groups
+
+
 def get_triangle_area(a, b, c) -> float:
     area = 0.5 * abs((a[0] * (b[1] - c[1])) + (b[0] * (c[1] - a[1])) + (c[0] * (a[1] - b[1])))
     return area
@@ -90,12 +123,12 @@ def get_points_separated_by_triangle(triangle, points):
 
 def get_largest_triangle(points: np.ndarray):
     if len(points) == 3:
-        return (points, [[], [], []])
+        return ([tuple(p) for p in points], [[], [], []])
 
     largest_triangle = None
     largest_triangle_area = 0
 
-    hull = get_convex_hull(points)
+    hull = get_convex_hull(points)[:-1]
     for a in hull:
         exclude_a = hull[(hull[:, 0] != a[0]) & (hull[:, 1] != a[1])]
         for b in exclude_a:
@@ -103,10 +136,30 @@ def get_largest_triangle(points: np.ndarray):
             for c in exclude_ab_arr:
                 area = get_triangle_area(a, b, c)
                 if can_build_triangle(a, b, c, points) and area > largest_triangle_area:
-                    largest_triangle = np.array([a, b, c])
+                    largest_triangle = [tuple(a), tuple(b), tuple(c)]
                     largest_triangle_area = area
 
-    separated_points = get_points_separated_by_triangle(largest_triangle, points)
+    if largest_triangle != None:
+        separated_points = get_points_separated_by_triangle(largest_triangle, points)
+        return (largest_triangle, separated_points)
+
+    hull_len = len(hull)
+    hull_edges = [(hull[i], hull[(i + 1) % hull_len]) for i in range(hull_len)]
+    separated_points = [[], [], []]
+    inner_points = [p for p in points if p not in hull]
+    for edge_index, edge in enumerate(hull_edges):
+        for p in inner_points:
+            (can_build, points_groups) = can_build_inner_triangle(hull_edges, edge_index, p, points)
+            if can_build:
+                area = get_triangle_area(edge[0], edge[1], p)
+                if area > largest_triangle_area:
+                    largest_triangle_area = area
+                    largest_triangle = [tuple(edge[0]), tuple(edge[1]), tuple(p)]
+
+                    group_index = 0 if len(points_groups[0]) % 3 == 0 else 1
+                    separated_points[0] = [tuple(p) for p in points_groups[group_index]]
+                    separated_points[1] = np.array([p for p in [tuple(p) for p in points_groups[(group_index + 1) % 2]] \
+                                                    if p not in separated_points[0]])
 
     return (largest_triangle, separated_points)
 
@@ -124,12 +177,6 @@ def is_inside_convex_polygon(polygon, point) -> bool:
         if cross_sign != sign:
             return False
     return True
-
-
-def cross_product(p1, p2):
-    (x1, y1) = (p1[0], p1[1])
-    (x2, y2) = (p2[0], p2[1])
-    return x1 * y2 - x2 * y1
 
 
 def is_separated_by_side(triangle, side_index, point) -> bool:

@@ -4,9 +4,7 @@ from brute_force import brute_force
 from graph_state_search import graph_state_search
 from hull_search import hull_search
 from helpers import random_points_generator, \
-    calculate_total_combination_area, \
-    parse_result
-from algorythm_enum import AlgorithmEnum
+    calculate_total_combination_area
 from user_output import print_experiment_matrix
 
 
@@ -56,7 +54,7 @@ def triangles_quantity_to_time_experiment():
     plt.plot(quantity, average_time_graph_state_search_list, marker='o', label='Graph State Search')
     plt.plot(quantity, average_time_hull_search_list, marker='o', label='Hull Search')
     plt.plot(quantity, average_time_brute_force_list, marker='o', label='Brute Force')
-    plt.xlabel('Quantity of the Triangles')
+    plt.xlabel('Quantity of Triangles')
     plt.ylabel('Average Execution Time (seconds)')
     plt.title('Quantity to Time')
     plt.legend()
@@ -110,7 +108,7 @@ def triangles_quantity_to_accuracy_experiment():
     plt.plot(quantity, average_shift_graph_state_search_list, marker='o', label='Graph State Search')
     plt.plot(quantity, average_shift_hull_search_list, marker='o', label='Hull Search')
     plt.plot(quantity, average_shift_brute_force_list, marker='o', label='Brute Force')
-    plt.xlabel('Quantity of the Triangles')
+    plt.xlabel('Quantity of Triangles')
     plt.ylabel('Average Shift')
     plt.title('Quantity to Accuracy')
     plt.legend()
@@ -212,12 +210,10 @@ def solving_problem_time(points):
 
 def solving_problem_shift(points):
     # Graph State Search Algorithm
-    graph_state_search_area = calculate_total_combination_area(
-        parse_result(graph_state_search(points).triangles, AlgorithmEnum.graph_state_search))
+    graph_state_search_area = calculate_total_combination_area(graph_state_search(points).triangles)
 
     # Hull Search Algorithm
-    hull_search_area = calculate_total_combination_area(
-        parse_result(hull_search(points), AlgorithmEnum.hull_search))
+    hull_search_area = calculate_total_combination_area(hull_search(points))
 
     # Brute Force Algorithm
     brute_force_area = calculate_total_combination_area(brute_force(points))

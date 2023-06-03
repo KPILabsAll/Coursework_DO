@@ -1,9 +1,8 @@
-from helpers import calculate_total_combination_area, add_triangles, parse_result
+from helpers import calculate_total_combination_area, add_triangles
 from algorythm_enum import AlgorithmEnum
 
 
-def print_results(triangle_combination, algorythm):
-    triangle_combination = parse_result(triangle_combination, algorythm)
+def print_results(triangle_combination):
     res = ""
     res += "--------------------------------------------\n"
     res += "Results:\n"
