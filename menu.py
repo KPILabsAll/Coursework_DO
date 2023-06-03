@@ -4,6 +4,9 @@ from brute_force import brute_force
 from graph_state_search import graph_state_search
 from hull_search import hull_search
 from algorythm_enum import AlgorithmEnum
+from experiments import triangles_quantity_to_time_experiment, \
+    triangles_quantity_to_accuracy_experiment, \
+    parameters_to_accuracy_experiment
 
 
 def menu():
@@ -19,9 +22,8 @@ def menu():
 
         if choice == '1':
             solve_problem()
-
-        # elif choice == '2':
-        #     choose_experiment()
+        elif choice == '2':
+            choose_experiment()
         elif choice == '3':
             break
         else:
@@ -38,6 +40,7 @@ def solve_problem():
     choice = input("Enter your choice (1-3): ")
 
     data = user_input()
+    print(data)
 
     if choice == '1':
         print_results(graph_state_search(data, []).triangles, AlgorithmEnum.graph_state_search)
@@ -45,6 +48,25 @@ def solve_problem():
         print_results(hull_search(data), AlgorithmEnum.hull_search)
     elif choice == '3':
         print_results(brute_force(data), AlgorithmEnum.brute_force)
+    else:
+        print("Invalid choice!")
+
+
+def choose_experiment():
+    print("--------------------------------------------")
+    print("Choose an experiment:")
+    print("1. The effect of the number of triangles on the algorithm's running time")
+    print("2. The effect of the number of triangles on the accuracy of algorithms")
+    print("3. The effect of the parameters of the problem on the accuracy of algorithms")
+    print("--------------------------------------------")
+    choice = input("Enter your choice (1-3): ")
+
+    if choice == '1':
+        triangles_quantity_to_time_experiment()
+    elif choice == '2':
+        triangles_quantity_to_accuracy_experiment()
+    elif choice == '3':
+        parameters_to_accuracy_experiment()
     else:
         print("Invalid choice!")
 

@@ -1,4 +1,4 @@
-from helpers import calculate_triangle_area, add_triangles, parse_result
+from helpers import calculate_total_combination_area, add_triangles, parse_result
 
 
 def print_results(triangle_combination, algorythm):
@@ -13,5 +13,5 @@ def print_results(triangle_combination, algorythm):
         i += 1
         print('Triangle', f'{i}:', triangle)
     print("--------------------------------------------")
-    print("Area:", sum(calculate_triangle_area(triangle) for triangle in triangle_combination))
+    print("Area:", calculate_total_combination_area(triangle_combination))
     add_triangles(triangle_combination)

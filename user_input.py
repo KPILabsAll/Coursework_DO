@@ -1,5 +1,5 @@
-import random
 import csv
+from helpers import random_points_generator
 
 
 def user_input():
@@ -30,14 +30,7 @@ def generate_random_points():
     print("--------------------------------------------")
     sigma = float(input("Enter sigma (dispersion for values): "))
     print("--------------------------------------------")
-    points = []
-
-    for _ in range(3 * n):
-        x = random.gauss(mu, sigma)
-        y = random.gauss(mu, sigma)
-        points.append((x, y))
-
-    return points
+    return random_points_generator(n, mu, sigma)
 
 
 def input_file():
@@ -53,7 +46,7 @@ def input_file():
     if (len(points) % 3) != 0:
         return ValueError('the number of points must be a multiple of 3')
 
-    formatted_points = [points[1], points[0]] + points[2:]  # Перетворення у потрібний формат
+    formatted_points = [points[1], points[0]] + points[2:]
     return formatted_points
 
 

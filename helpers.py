@@ -1,5 +1,17 @@
+import random
 from matplotlib import pyplot as plt
 from algorythm_enum import AlgorithmEnum
+
+
+def random_points_generator(n, mu, sigma):
+    points = []
+
+    for _ in range(3 * n):
+        x = random.gauss(mu, sigma)
+        y = random.gauss(mu, sigma)
+        points.append((x, y))
+
+    return points
 
 
 def add_triangles(triangles):
@@ -30,3 +42,7 @@ def calculate_triangle_area(triangle):
 
     area = 0.5 * abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1))
     return area
+
+
+def calculate_total_combination_area(triangle_combination):
+    return sum(calculate_triangle_area(triangle) for triangle in triangle_combination)
