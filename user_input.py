@@ -41,7 +41,7 @@ def input_file():
     with open(filename, 'r') as file:
         reader = csv.reader(file, delimiter=' ')
         for row in reader:
-            points.append((int(row[0]), int(row[1])))
+            points.append((float(row[0]), float(row[1])))
 
     if (len(points) % 3) != 0:
         return ValueError('the number of points must be a multiple of 3')
@@ -57,8 +57,8 @@ def input_points():
 
     points = []
     for i in range(3 * n):
-        x = int(input(f"Enter x-coordinate of point {i + 1}: "))
-        y = int(input(f"Enter y-coordinate of point {i + 1}: "))
+        x = float(input(f"Enter x-coordinate of point {i + 1}: "))
+        y = float(input(f"Enter y-coordinate of point {i + 1}: "))
         points.append((x, y))
 
     return points
