@@ -28,3 +28,27 @@ def print_results_to_file(results, algorythm: AlgorithmEnum):
 
     with open(filename, 'w') as file:
         file.write(results)
+
+
+def print_experiment_matrix(average_graph_state_search_list,
+                            average_hull_search_list,
+                            average_brute_force_list,
+                            quantity):
+    algs = ["Graph State Search", "Hull Search", "Brute Force"]
+    column_numbers = quantity
+    alg_values = [average_graph_state_search_list, average_hull_search_list, average_brute_force_list]
+
+    max_alg_name_length = max(len(name) for name in algs)
+
+    print(f"{'':<{max_alg_name_length + 2}}", end="")
+    for number in column_numbers:
+        print(f"{number:<10.5f}", end="")
+    print()
+
+    for i, algorithm in enumerate(alg_values):
+        print(f"{algs[i]:<{max_alg_name_length}}", end="  ")
+        for value in algorithm:
+            print(f"{value:<10.5f}", end="")
+        print()
+
+

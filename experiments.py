@@ -7,6 +7,7 @@ from helpers import random_points_generator, \
     calculate_total_combination_area, \
     parse_result
 from algorythm_enum import AlgorithmEnum
+from user_output import print_experiment_matrix
 
 
 def triangles_quantity_to_time_experiment():
@@ -46,6 +47,11 @@ def triangles_quantity_to_time_experiment():
         average_time_graph_state_search_list.append(average_time_graph_state_search / experiments)
         average_time_hull_search_list.append(average_time_hull_search / experiments)
         average_time_brute_force_list.append(average_time_brute_force / experiments)
+
+    print_experiment_matrix(average_time_graph_state_search_list,
+                            average_time_hull_search_list,
+                            average_time_brute_force_list,
+                            quantity)
 
     plt.plot(quantity, average_time_graph_state_search_list, marker='o', label='Graph State Search')
     plt.plot(quantity, average_time_hull_search_list, marker='o', label='Hull Search')
@@ -95,6 +101,11 @@ def triangles_quantity_to_accuracy_experiment():
         average_shift_graph_state_search_list.append(average_shift_graph_state_search / experiments)
         average_shift_hull_search_list.append(average_shift_hull_search / experiments)
         average_shift_brute_force_list.append(average_shift_brute_force / experiments)
+
+    print_experiment_matrix(average_shift_graph_state_search_list,
+                            average_shift_hull_search_list,
+                            average_shift_brute_force_list,
+                            quantity)
 
     plt.plot(quantity, average_shift_graph_state_search_list, marker='o', label='Graph State Search')
     plt.plot(quantity, average_shift_hull_search_list, marker='o', label='Hull Search')
@@ -154,6 +165,11 @@ def parameters_to_accuracy_experiment():
         average_shift_brute_force_list.append(average_shift_brute_force / experiments)
 
         r += 1
+
+    print_experiment_matrix(average_shift_graph_state_search_list,
+                            average_shift_hull_search_list,
+                            average_shift_brute_force_list,
+                            quantity)
 
     plt.plot(quantity, average_shift_graph_state_search_list, marker='o', label='Graph State Search')
     plt.plot(quantity, average_shift_hull_search_list, marker='o', label='Hull Search')
